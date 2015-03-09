@@ -1,0 +1,14 @@
+var sys = require('sys')
+var exec = require('child_process').exec;
+var options = {
+	gid:0,
+	uid:0
+}
+function puts(error, stdout, stderr) { sys.puts(stdout) }
+exec("ping -c 3 localhost > test.txt", options, puts);
+exec("tc qdisc add dev lo root netem delay 200ms >> test.txt", options, puts);
+exec("sleep 5 >> test.txt", options, puts);
+exec("ping -c 3 localhost >> test.txt", options, puts);
+exec("tc qdisc del dev lo root >> test.txt", options, puts);
+exec("tc -s qdisc ls dev lo >> test.txt", options, puts);
+
